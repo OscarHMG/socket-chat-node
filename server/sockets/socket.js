@@ -19,10 +19,10 @@ io.on('connection', (client) => {
 
         let allUsers = users.addNewUser(client.id, user.name, user.room);
 
-        client.broadcast.emit('listAllUsersConnected', users.getAllUsers());
+        client.broadcast.to(user.room).emit('listAllUsersConnected', users.getUserByRoom(user.room));
 
         //Returna ll the users connected in the chat
-        callback(allUsers);
+        callback(users.getUserByRoom(user.room));
     });
 
 
@@ -30,7 +30,7 @@ io.on('connection', (client) => {
 
         let user = users.getUser(client.id);
         let message = createMessage(user.name, data.message);
-        client.broadcast.emit('sendMessage', message);
+        client.broadcast.to(user.room).emit('sendMessage', message);
     });
 
     client.on('disconnect', () => {
@@ -38,9 +38,9 @@ io.on('connection', (client) => {
 
 
         //User is retired from the chat, notify all the users
-        client.broadcast.emit('notifyUsers', createMessage('Admin', `${userRemoved.name} left the chat`));
+        client.broadcast.to(userRemoved.room).emit('notifyUsers', createMessage('Admin', `${userRemoved.name} left the chat`));
 
-        client.broadcast.emit('listAllUsersConnected', users.getAllUsers());
+        client.broadcast.to(userRemoved.room).emit('listAllUsersConnected', users.getUserByRoom(userRemoved.room));
     });
 
 

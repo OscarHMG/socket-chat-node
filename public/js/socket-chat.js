@@ -11,7 +11,7 @@ $(document).ready(function() {
 
     var user = {
         name: params.get('name'),
-        room: params.get('room');
+        room: params.get('room')
     };
 
     socket.on('connect', function() {
@@ -19,7 +19,7 @@ $(document).ready(function() {
 
         //Send notification to server that the user is in the chat.
         socket.emit('enterChat', user, function(resp) {
-            console.log('Users connected: ', resp)
+            renderUsers(resp);
         });
     });
 
@@ -37,13 +37,15 @@ $(document).ready(function() {
 
     //Listen BROADCAST WHEN USER DISCONNECT
     socket.on('notifyUsers', function(resp) {
-        console.log('Server :', resp)
+        console.log('Server :', resp);
+        renderUsers(resp);
 
     });
 
     //LISTEN BROADCAST WHEN USER ENTER/LEAVES THE CHAT
     socket.on('listAllUsersConnected', function(users) {
-        console.log(users)
+        //console.log(users);
+        renderUsers(users);
     });
 
     //Private messages

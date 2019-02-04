@@ -19,6 +19,13 @@ class Users {
         return user;
     }
 
+    getUserByRoom(room) {
+        let usersByRoom = this.users.filter(user => {
+            return user.room === room;
+        });
+        return usersByRoom;
+    }
+
     getAllUsers() {
         return this.users;
     }
