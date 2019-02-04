@@ -32,7 +32,8 @@ $(document).ready(function() {
 
     //Listen MESSAGES SENDED
     socket.on('sendMessage', function(message) {
-        console.log('Server (New message)', message)
+        drawMessageChat(message, false);
+        scrollBottom();
     });
 
     //Listen BROADCAST WHEN USER DISCONNECT
@@ -40,6 +41,7 @@ $(document).ready(function() {
         console.log('Server :', resp);
         renderUsers(resp);
 
+        drawMessageChat(resp, false);
     });
 
     //LISTEN BROADCAST WHEN USER ENTER/LEAVES THE CHAT

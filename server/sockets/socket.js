@@ -21,16 +21,20 @@ io.on('connection', (client) => {
 
         client.broadcast.to(user.room).emit('listAllUsersConnected', users.getUserByRoom(user.room));
 
+        client.broadcast.to(user.room).emit('sendMessage', createMessage('Admin', `${user.name} join the chat`));
+
+
         //Returna ll the users connected in the chat
         callback(users.getUserByRoom(user.room));
     });
 
 
-    client.on('sendMessage', (data) => {
+    client.on('sendMessage', (data, callback) => {
 
         let user = users.getUser(client.id);
         let message = createMessage(user.name, data.message);
         client.broadcast.to(user.room).emit('sendMessage', message);
+        callback(message);
     });
 
     client.on('disconnect', () => {
