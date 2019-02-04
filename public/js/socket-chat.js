@@ -1,14 +1,17 @@
+var socket;
+
 $(document).ready(function() {
-    var socket = io();
+    socket = io();
     var params = new URLSearchParams(window.location.search);
 
-    if (!params.has('name')) {
+    if (!params.has('name') || !params.has('room')) {
         window.location = 'index.html';
-        throw new Error('Param "name" is required');
+        throw new Error('Param "name" and "room" are required');
     }
 
     var user = {
-        name: params.get('name')
+        name: params.get('name'),
+        room: params.get('room');
     };
 
     socket.on('connect', function() {
@@ -25,5 +28,26 @@ $(document).ready(function() {
 
         console.log('Perdimos conexión con el servidor');
 
+    });
+
+    //Listen MESSAGES SENDED
+    socket.on('sendMessage', function(message) {
+        console.log('Server (New message)', message)
+    });
+
+    //Listen BROADCAST WHEN USER DISCONNECT
+    socket.on('notifyUsers', function(resp) {
+        console.log('Server :', resp)
+
+    });
+
+    //LISTEN BROADCAST WHEN USER ENTER/LEAVES THE CHAT
+    socket.on('listAllUsersConnected', function(users) {
+        console.log(users)
+    });
+
+    //Private messages
+    socket.on('sendPrivateMessage', function(message) {
+        console.log('Private mssg: ', message)
     });
 });

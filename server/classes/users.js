@@ -5,10 +5,9 @@ class Users {
     }
 
 
-    addNewUser(id, name) {
-        let user = { id, name };
+    addNewUser(id, name, room) {
+        let user = { id, name, room };
         this.users.push(user);
-
         return this.users;
     }
 
@@ -26,9 +25,12 @@ class Users {
 
     removeUser(id) {
         let userRemoved = this.getUser(id);
+
         this.users = this.users.filter(user => {
             return user.id !== id
         });
+
+
 
         return userRemoved;
     }
